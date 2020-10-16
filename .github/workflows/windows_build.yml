@@ -1,0 +1,22 @@
+name: Windows-Only-Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: '0 5 * * *'
+
+jobs:
+  windows_ci:
+    name: CMake
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure
+      run: mkdir build && cd build && cmake ..
+    - name: build
+      run: cmake --build build --config Debug
+    - name: test
+      run: cd build && ctest
