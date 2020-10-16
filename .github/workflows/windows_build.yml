@@ -15,7 +15,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: configure
-      run: mkdir build && cd build && cmake ..
+      run: |
+        vcpkg install boost
+        mkdir build && cd build && cmake ..
     - name: build
       run: cmake --build build --config Debug
     - name: test
