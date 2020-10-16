@@ -29,6 +29,7 @@
 #include <queue>
 
 #include <boost_graph_issue/graph.h>
+#include <console_bridge/console.h>
 
 namespace boost_graph_issue
 {
