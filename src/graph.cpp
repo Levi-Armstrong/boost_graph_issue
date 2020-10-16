@@ -104,13 +104,13 @@ bool SceneGraph::addLink(Link link, Joint joint)
 {
   if (getLink(link.getName()) != nullptr)
   {
-//    CONSOLE_BRIDGE_logWarn("Tried to add link (%s) with same name as an existing link.", link.getName().c_str());
+    CONSOLE_BRIDGE_logWarn("Tried to add link (%s) with same name as an existing link.", link.getName().c_str());
     return false;
   }
 
   if (getJoint(joint.getName()) != nullptr)
   {
-//    CONSOLE_BRIDGE_logWarn("Tried to add joint (%s) with same name as an existing joint.", joint.getName().c_str());
+    CONSOLE_BRIDGE_logWarn("Tried to add joint (%s) with same name as an existing joint.", joint.getName().c_str());
     return false;
   }
 
@@ -167,7 +167,7 @@ bool SceneGraph::removeLink(const std::string& name)
   auto found = link_map_.find(name);
   if (found == link_map_.end())
   {
-//    CONSOLE_BRIDGE_logWarn("Tried to remove link (%s) from scene graph that does not exist.", name.c_str());
+    CONSOLE_BRIDGE_logWarn("Tried to remove link (%s) from scene graph that does not exist.", name.c_str());
     return false;
   }
 
@@ -237,19 +237,19 @@ bool SceneGraph::addJoint(boost_graph_issue::Joint::Ptr joint_ptr)
 
   if (parent == link_map_.end())
   {
-//    CONSOLE_BRIDGE_logWarn("Parent link (%s) does not exist in scene graph.", joint_ptr->parent_link_name.c_str());
+    CONSOLE_BRIDGE_logWarn("Parent link (%s) does not exist in scene graph.", joint_ptr->parent_link_name.c_str());
     return false;
   }
 
   if (child == link_map_.end())
   {
-//    CONSOLE_BRIDGE_logWarn("Child link (%s) does not exist in scene graph.", joint_ptr->child_link_name.c_str());
+    CONSOLE_BRIDGE_logWarn("Child link (%s) does not exist in scene graph.", joint_ptr->child_link_name.c_str());
     return false;
   }
 
   if (found != joint_map_.end())
   {
-//    CONSOLE_BRIDGE_logWarn("Joint with name (%s) already exists in scene graph.", joint_ptr->getName().c_str());
+    CONSOLE_BRIDGE_logWarn("Joint with name (%s) already exists in scene graph.", joint_ptr->getName().c_str());
     return false;
   }
 
@@ -291,7 +291,7 @@ bool SceneGraph::moveJoint(const std::string& name, const std::string& parent_li
 
   if (found == joint_map_.end())
   {
-//    CONSOLE_BRIDGE_logWarn("Tried to move Joint with name (%s) which does not exist in scene graph.", name.c_str());
+    CONSOLE_BRIDGE_logWarn("Tried to move Joint with name (%s) which does not exist in scene graph.", name.c_str());
     return false;
   }
 
@@ -319,8 +319,8 @@ bool SceneGraph::changeJointOrigin(const std::string& name, const Eigen::Isometr
 
   if (found == joint_map_.end())
   {
-//    CONSOLE_BRIDGE_logWarn("Tried to change Joint origin with name (%s) which does not exist in scene graph.",
-//                           name.c_str());
+    CONSOLE_BRIDGE_logWarn("Tried to change Joint origin with name (%s) which does not exist in scene graph.",
+                           name.c_str());
     return false;
   }
 
@@ -574,18 +574,18 @@ SceneGraph::Path SceneGraph::getShortestPath(const std::string& root, const std:
   std::reverse(links.begin(), links.end());
   std::reverse(joints.begin(), joints.end());
 
-//#ifndef NDEBUG
-//  CONSOLE_BRIDGE_logDebug("distances and parents:");
-//  Graph::vertex_iterator vi, vend;
-//  for (boost::tie(vi, vend) = boost::vertices(graph); vi != vend; ++vi)
-//  {
-//    CONSOLE_BRIDGE_logDebug("distance(%s) = %d, parent(%s) = %s",
-//                            boost::get(boost::vertex_link, graph)[*vi]->getName().c_str(),
-//                            distance_map[*vi],
-//                            boost::get(boost::vertex_link, graph)[*vi]->getName().c_str(),
-//                            boost::get(boost::vertex_link, graph)[predicessor_map[*vi]]->getName().c_str());
-//  }
-//#endif
+#ifndef NDEBUG
+  CONSOLE_BRIDGE_logDebug("distances and parents:");
+  Graph::vertex_iterator vi, vend;
+  for (boost::tie(vi, vend) = boost::vertices(graph); vi != vend; ++vi)
+  {
+    CONSOLE_BRIDGE_logDebug("distance(%s) = %d, parent(%s) = %s",
+                            boost::get(boost::vertex_link, graph)[*vi]->getName().c_str(),
+                            distance_map[*vi],
+                            boost::get(boost::vertex_link, graph)[*vi]->getName().c_str(),
+                            boost::get(boost::vertex_link, graph)[predicessor_map[*vi]]->getName().c_str());
+  }
+#endif
   return Path(links, joints);
 }
 
@@ -645,8 +645,8 @@ bool SceneGraph::insertSceneGraph(const boost_graph_issue::SceneGraph& scene_gra
   {
     if (link_map_.find(prefix + link->getName()) != link_map_.end())
     {
-//      CONSOLE_BRIDGE_logError("Failed to add inserted graph, link names are not unique: %s",
-//                              (prefix + link->getName()).c_str());
+      CONSOLE_BRIDGE_logError("Failed to add inserted graph, link names are not unique: %s",
+                              (prefix + link->getName()).c_str());
       return false;
     }
   }
@@ -656,8 +656,8 @@ bool SceneGraph::insertSceneGraph(const boost_graph_issue::SceneGraph& scene_gra
   {
     if (joint_map_.find(prefix + joint->getName()) != joint_map_.end())
     {
-//      CONSOLE_BRIDGE_logError("Failed to add inserted graph, joint names are not unique: %s",
-//                              (prefix + joint->getName()).c_str());
+      CONSOLE_BRIDGE_logError("Failed to add inserted graph, joint names are not unique: %s",
+                              (prefix + joint->getName()).c_str());
       return false;
     }
   }
@@ -668,7 +668,7 @@ bool SceneGraph::insertSceneGraph(const boost_graph_issue::SceneGraph& scene_gra
     bool res = addLink(std::move(new_link));
     if (!res)
     {
-//      CONSOLE_BRIDGE_logError("Failed to add inserted graph link: %s", link->getName().c_str());
+      CONSOLE_BRIDGE_logError("Failed to add inserted graph link: %s", link->getName().c_str());
       return false;
     }
   }
@@ -679,7 +679,7 @@ bool SceneGraph::insertSceneGraph(const boost_graph_issue::SceneGraph& scene_gra
     bool res = addJoint(std::move(new_joint));
     if (!res)
     {
-//      CONSOLE_BRIDGE_logError("Failed to add inserted graph joint: %s", joint->getName().c_str());
+      CONSOLE_BRIDGE_logError("Failed to add inserted graph joint: %s", joint->getName().c_str());
       return false;
     }
   }
@@ -706,14 +706,14 @@ bool SceneGraph::insertSceneGraph(const boost_graph_issue::SceneGraph& scene_gra
 
   if (getLink(parent_link) == nullptr || scene_graph.getLink(child_link) == nullptr)
   {
-//    CONSOLE_BRIDGE_logError("Failed to add inserted graph, provided joint link names do not exist in inserted graph!");
+    CONSOLE_BRIDGE_logError("Failed to add inserted graph, provided joint link names do not exist in inserted graph!");
     return false;
   }
 
   if (getJoint(joint.getName()) != nullptr)
   {
-//    CONSOLE_BRIDGE_logError("Failed to add inserted graph, provided joint name %s already exists!",
-//                            joint.getName().c_str());
+    CONSOLE_BRIDGE_logError("Failed to add inserted graph, provided joint name %s already exists!",
+                            joint.getName().c_str());
     return false;
   }
 

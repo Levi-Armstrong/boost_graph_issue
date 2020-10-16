@@ -7,9 +7,10 @@ endif()
 
 find_package(Boost REQUIRED)
 find_package(Eigen3 REQUIRED)
+find_package(console_bridge REQUIRED)
 
 add_library(${PROJECT_NAME} src/graph.cpp)
-target_link_libraries(${PROJECT_NAME} PUBLIC ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${Boost_LIBRARIES} console_bridge)
 target_compile_options(${PROJECT_NAME} PRIVATE ${TESSERACT_COMPILE_OPTIONS})
 target_compile_definitions(${PROJECT_NAME} PUBLIC _USE_MATH_DEFINES=ON Boost_USE_STATIC_LIBS=OFF Boost_USE_MULTITHREADED=ON Boost_USE_STATIC_RUNTIME=OFF)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_14)
