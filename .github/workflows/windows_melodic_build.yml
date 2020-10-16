@@ -1,0 +1,40 @@
+name: Windows-Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: '0 5 * * *'
+
+jobs:
+  windows_ci:
+    name: Melodic
+    runs-on: windows-latest
+    env:
+      ROS_DISTRO: noetic
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+        path: src/boost_graph_issue
+    - name: Build
+      shell: cmd
+      run: |
+        choco sources add -n=roswin -s https://aka.ms/ros/public --priority 1
+        choco install ros-%ROS_DISTRO%-desktop_full -y --no-progress
+
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=amd64 -host_arch=amd64
+        call "C:\opt\ros\%ROS_DISTRO%\x64\setup.bat"
+
+        choco install console_bridge -y --no-progress
+        choco install clapack -y --no-progress
+        choco install openblas -y --no-progress
+
+        set PATH=C:\opt\rosdeps\x64\bin;C:\opt\rosdeps\x64\lib;%PATH%
+        set LD_LIBRARY_PATH=%LD_LIBRARY_PATH%;C:\opt\rosdeps\x64\lib
+        set CMAKE_PREFIX_PATH=C:\opt\rosdeps\x64;%CMAKE_PREFIX_PATH%
+        set PKG_CONFIG_PATH=%PKG_CONFIG_PATH%;C:\opt\rosdeps\x64\lib\pkgconfig
+
+        catkin_make_isolated --install --force-cmake --only-pkg-with-deps boost_graph_issue --cmake-args -DCMAKE_BUILD_TYPE=Release
